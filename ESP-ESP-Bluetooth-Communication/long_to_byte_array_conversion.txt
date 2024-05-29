@@ -1,0 +1,33 @@
+Explanation of Distance Conversion to Byte Array:
+In the loop function, the distance measured by the ultrasonic sensor is a long integer, which means it can be a large number that takes up 4 bytes of memory. Bluetooth transmission typically sends data in small chunks, so we need to break this large number into smaller parts that can be sent individually. Here’s how this conversion works:
+
+A long integer in C++ is 4 bytes long. Each byte can store a number between 0 and 255.
+To send the long integer over Bluetooth, we split it into 4 individual bytes.
+This is done using bitwise operations:
+send_data[0] = (distance >> 24) & 0xFF; extracts the highest byte (most significant byte).
+send_data[1] = (distance >> 16) & 0xFF; extracts the second highest byte.
+send_data[2] = (distance >> 8) & 0xFF; extracts the third highest byte.
+send_data[3] = distance & 0xFF; extracts the lowest byte (least significant byte).
+Understanding Bitwise Operations:
+Right Shift (>>):
+
+The right shift operator (>>) shifts the bits of a number to the right by the specified number of positions.
+For example, distance >> 24 shifts the bits of distance 24 places to the right, effectively discarding the lowest 24 bits and keeping the highest 8 bits. This extracts the highest byte of the number.
+Similarly, distance >> 16, distance >> 8, and distance shift the bits by 16, 8, and 0 places, respectively, to extract the next highest bytes.
+Bitwise AND (&):
+
+The bitwise AND operator (&) is used to mask certain bits of a number.
+0xFF is a hexadecimal number that represents 255 in decimal, which is 11111111 in binary. It has all bits set to 1.
+By performing a bitwise AND with 0xFF, we keep only the lowest 8 bits of the number and set all other bits to 0.
+For example, (distance >> 24) & 0xFF keeps only the lowest 8 bits of the shifted number, effectively extracting the highest byte of the original number.
+By breaking the distance into four 1-byte pieces, we can send each piece over Bluetooth. On the receiving end, these bytes can be reassembled back into the original long integer value. This process ensures that the data is transmitted correctly and efficiently.
+
+Conversion of Byte Array to Long Integer:
+
+The received byte array is converted back to a long integer using bitwise operations:
+(received_data[0] << 24) shifts the highest byte to the correct position.
+(received_data[1] << 16) shifts the second highest byte to the correct position.
+(received_data[2] << 8) shifts the third highest byte to the correct position.
+received_data[3] is the lowest byte, which remains in its original position.
+The | operator combines these shifted bytes into a single long integer.
+
