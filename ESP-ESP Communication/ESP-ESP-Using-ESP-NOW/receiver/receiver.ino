@@ -4,7 +4,8 @@
 // Structure example to receive data
 // Must match the sender structure
 typedef struct struct_message {
-    int ldrValue;
+    // int ldrValue;
+    char *text
 } struct_message;
 
 struct_message incomingData;
@@ -18,7 +19,8 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   Serial.print("Bytes received: ");
   Serial.println(len);
   Serial.print("LDR Value: ");
-  Serial.println(myData.ldrValue);
+  // Serial.println(myData.ldrValue);
+  Serial.println(myData.text);
   int data = map(myData.ldrValue, 0, 4095, 800, 2000);
   tone(4, data);
 }

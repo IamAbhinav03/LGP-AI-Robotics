@@ -10,6 +10,7 @@ uint8_t receiverMacAddress[] = {0x10, 0x06, 0x1C, 0xB4, 0xE8, 0x80}; // Replace 
 // Must match the receiver structure
 typedef struct struct_message {
     int ldrValue;
+    char *text
 } struct_message;
 
 struct_message myData;
@@ -42,10 +43,11 @@ void setup() {
 
 void loop() {
   // Read LDR value
-  int ldrValue = analogRead(36);
-  delay(10);
-  Serial.printf("ldrValue: %d\n", ldrValue);
-  myData.ldrValue = ldrValue;
+  // int ldrValue = analogRead(36);
+  // delay(10);
+  // Serial.printf("ldrValue: %d\n", ldrValue);
+  // myData.ldrValue = ldrValue;
+  myData.text = "Hi";
 
   // Send message via ESP-NOW
   esp_err_t result = esp_now_send(receiverMacAddress, (uint8_t *) &myData, sizeof(myData));
